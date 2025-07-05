@@ -1,0 +1,12 @@
+{
+  "name": "arabic-addon-fixed",
+  "version": "1.0.0",
+  "description": "Fixed Arabic Stremio Addon",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "stremio-addon-sdk": "^1.5.0"
+  }
+}
