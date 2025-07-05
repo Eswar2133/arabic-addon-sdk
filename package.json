@@ -1,0 +1,12 @@
+{
+  "name": "arabic-addon-sdk",
+  "version": "1.0.0",
+  "description": "Arabic Stremio Addon using SDK",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "stremio-addon-sdk": "^0.3.0"
+  }
+}
