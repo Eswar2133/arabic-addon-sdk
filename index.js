@@ -54,4 +54,25 @@ app.use((req, res, next) => {
 });
 
 // Routes for Stremio addon
-app.get(
+app.get("/manifest.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(addonInterface.manifest);
+});
+
+app.get("/catalog/:type/:id/:extra?.json", (req, res) => {
+  addonInterface.getCatalog(req.params).then((catalog) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(catalog);
+  });
+});
+
+app.get("/stream/:type/:id.json", (req, res) => {
+  addonInterface.getStream(req.params).then((streams) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(streams);
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Stremio Arabic addon running on port ${PORT}`);
+});
