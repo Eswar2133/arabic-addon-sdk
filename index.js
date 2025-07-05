@@ -22,24 +22,34 @@ const MOVIES = [
   },
 ];
 
-builder.defineCatalogHandler((_args, cb) => {
-  cb(null, { metas: MOVIES });
-});
-
-builder.defineStreamHandler(({ id }, cb) => {
-  if (id === "arabic-movie-1") {
-    cb(null, {
-      streams: [
-        {
-          title: "Watch HD",
-          url: "https://archive.org/download/Nasser-Salah-El-Din/Nasser-Salah-El-Din.mp4",
-        },
-      ],
-    });
-  } else {
-    cb(null, { streams: [] });
+builder.defineCatalogHandler((args, cb) => {
+  try {
+    cb(null, { metas: MOVIES });
+  } catch (err) {
+    console.error("Catalog handler error:", err);
+    cb(err);
   }
 });
 
-// Export the handler function directly
+builder.defineStreamHandler(({ id }, cb) => {
+  try {
+    if (id === "arabic-movie-1") {
+      cb(null, {
+        streams: [
+          {
+            title: "Watch HD",
+            url: "https://archive.org/download/Nasser-Salah-El-Din/Nasser-Salah-El-Din.mp4",
+          },
+        ],
+      });
+    } else {
+      cb(null, { streams: [] });
+    }
+  } catch (err) {
+    console.error("Stream handler error:", err);
+    cb(err);
+  }
+});
+
+// Export the interface handler function
 module.exports = builder.getInterface();
