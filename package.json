@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node index.js"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
-    "stremio-addon-sdk": "^0.3.0"
+    "stremio-addon-sdk": "^1.5.0"
   }
 }
