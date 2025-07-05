@@ -46,33 +46,49 @@ const app = express();
 const PORT = process.env.PORT || 7000;
 const addonInterface = builder.getInterface();
 
-// CORS middleware
+// ✅ Enable CORS for all routes
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   next();
 });
 
-// Routes for Stremio addon
+// ✅ Manifest endpoint
 app.get("/manifest.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(addonInterface.manifest);
 });
 
+// ✅ Updated catalog endpoint with extra param fix
 app.get("/catalog/:type/:id/:extra?.json", (req, res) => {
-  addonInterface.getCatalog(req.params).then((catalog) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(catalog);
-  });
+  const { type, id } = req.params;
+  const extra = req.query || {};
+
+  addonInterface.getCatalog({ type, id, extra })
+    .then((catalog) => {
+      res.setHeader("Content-Type", "application/json");
+      res.send(catalog);
+    })
+    .catch((err) => {
+      console.error("Catalog error:", err);
+      res.status(500).send({ error: err.message });
+    });
 });
 
+// ✅ Stream endpoint
 app.get("/stream/:type/:id.json", (req, res) => {
-  addonInterface.getStream(req.params).then((streams) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(streams);
-  });
+  addonInterface.getStream(req.params)
+    .then((streams) => {
+      res.setHeader("Content-Type", "application/json");
+      res.send(streams);
+    })
+    .catch((err) => {
+      console.error("Stream error:", err);
+      res.status(500).send({ error: err.message });
+    });
 });
 
+// ✅ Start server
 app.listen(PORT, () => {
-  console.log(`Stremio Arabic addon running on port ${PORT}`);
+  console.log(`✅ Stremio Arabic addon running on port ${PORT}`);
 });
