@@ -46,7 +46,14 @@ const app = express();
 const PORT = process.env.PORT || 7000;
 const addonInterface = builder.getInterface();
 
-// Define explicit endpoint routes for Render
+// ✅ Fix CORS (very important for Stremio)
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  next();
+});
+
+// Routes required by Stremio
 app.get("/manifest.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(addonInterface.manifest);
@@ -60,12 +67,4 @@ app.get("/catalog/:type/:id/:extra?.json", (req, res) => {
 });
 
 app.get("/stream/:type/:id.json", (req, res) => {
-  addonInterface.getStream(req.params).then((streams) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(streams);
-  });
-});
-
-app.listen(PORT, () => {
-  console.log(`Stremio addon running on port ${PORT}`);
-});
+  addonInterface.getStream(r
