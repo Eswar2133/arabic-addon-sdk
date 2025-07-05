@@ -10,7 +10,7 @@
     "node": "18.x"
   },
   "dependencies": {
-    "stremio-addon-sdk": "^1.5.0"
+    "stremio-addon-sdk": "^1.5.0",
     "express": "^4.18.2"
   }
 }
