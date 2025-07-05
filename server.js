@@ -7,9 +7,8 @@ http
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Content-Type", "application/json");
     }
-
-    // ✅ Corrected handler call
-    addonInterface.handler(req, res);
+    // Call addonInterface as function (not .handler)
+    addonInterface(req, res);
   })
   .listen(process.env.PORT || 7000, () => {
     console.log("✅ Arabic addon is running");
