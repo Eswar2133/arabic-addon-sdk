@@ -11,7 +11,7 @@ const builder = new addonBuilder({
   catalogs: [{ type: "movie", id: "arabic", name: "Arabic Classics" }],
 });
 
-// Sample movie
+// Your content
 const MOVIES = [
   {
     id: "arabic-movie-1",
@@ -22,17 +22,17 @@ const MOVIES = [
   },
 ];
 
-// Catalog handler with async + try/catch
+// Catalog handler
 builder.defineCatalogHandler(async (args, cb) => {
   try {
     cb(null, { metas: MOVIES });
   } catch (err) {
-    console.error("Catalog handler error:", err);
+    console.error("Catalog error:", err);
     cb(err);
   }
 });
 
-// Stream handler with async + try/catch
+// Stream handler
 builder.defineStreamHandler(async ({ id }, cb) => {
   try {
     if (id === "arabic-movie-1") {
@@ -48,9 +48,10 @@ builder.defineStreamHandler(async ({ id }, cb) => {
       cb(null, { streams: [] });
     }
   } catch (err) {
-    console.error("Stream handler error:", err);
+    console.error("Stream error:", err);
     cb(err);
   }
 });
 
+// ✅ Export a raw HTTP interface
 module.exports = builder.getInterface();
