@@ -11,7 +11,6 @@ const builder = new addonBuilder({
   catalogs: [{ type: "movie", id: "arabic", name: "Arabic Classics" }],
 });
 
-// Your content
 const MOVIES = [
   {
     id: "arabic-movie-1",
@@ -22,18 +21,16 @@ const MOVIES = [
   },
 ];
 
-// Catalog handler
-builder.defineCatalogHandler(async (args, cb) => {
+builder.defineCatalogHandler((args, cb) => {
   try {
     cb(null, { metas: MOVIES });
   } catch (err) {
-    console.error("Catalog error:", err);
+    console.error("Catalog handler error:", err);
     cb(err);
   }
 });
 
-// Stream handler
-builder.defineStreamHandler(async ({ id }, cb) => {
+builder.defineStreamHandler(({ id }, cb) => {
   try {
     if (id === "arabic-movie-1") {
       cb(null, {
@@ -48,10 +45,10 @@ builder.defineStreamHandler(async ({ id }, cb) => {
       cb(null, { streams: [] });
     }
   } catch (err) {
-    console.error("Stream error:", err);
+    console.error("Stream handler error:", err);
     cb(err);
   }
 });
 
-// ✅ Export a raw HTTP interface
+// ✅ VERY IMPORTANT: Export the function (NOT .get, NOT an object)
 module.exports = builder.getInterface();
