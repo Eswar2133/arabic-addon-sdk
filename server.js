@@ -1,10 +1,14 @@
 const http = require("http");
 const addonInterface = require("./index");
 
+// Global error catcher for rejected promises
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("🔥 Unhandled Rejection:", reason);
+});
+
 const handler = addonInterface.get;
 
 const server = http.createServer((req, res) => {
-  // Handle CORS for JSON API requests
   if (req.url.endsWith(".json")) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -16,7 +20,7 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
-  // Call the addon interface get method to handle request
+  // Route request to addon interface
   handler(req, res);
 });
 
