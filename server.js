@@ -1,28 +1,19 @@
 const http = require("http");
-const addonInterface = require("./index");
+const handler = require("./index"); // ✅ Expecting a function
 
-// Global rejection catcher
-process.on("unhandledRejection", (reason, promise) => {
+process.on("unhandledRejection", (reason) => {
   console.error("🔥 Unhandled Rejection:", reason);
 });
 
-// This is the correct HTTP handler function from SDK
-const handler = addonInterface; // ✅ should be a function
-
 const server = http.createServer((req, res) => {
-  // Add CORS for Stremio
-  if (req.url.endsWith(".json")) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  }
-
+  // Add CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
   if (req.method === "OPTIONS") {
     res.writeHead(204);
     return res.end();
   }
 
-  // ✅ Call the raw addon interface (it's a function now)
+  // ✅ Call the exported handler from index.js
   handler(req, res);
 });
 
