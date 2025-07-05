@@ -46,25 +46,12 @@ const app = express();
 const PORT = process.env.PORT || 7000;
 const addonInterface = builder.getInterface();
 
-// ✅ Fix CORS (very important for Stremio)
+// CORS middleware
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
   res.setHeader("Access-Control-Allow-Headers", "*");
   next();
 });
 
-// Routes required by Stremio
-app.get("/manifest.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(addonInterface.manifest);
-});
-
-app.get("/catalog/:type/:id/:extra?.json", (req, res) => {
-  addonInterface.getCatalog(req.params).then((catalog) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(catalog);
-  });
-});
-
-app.get("/stream/:type/:id.json", (req, res) => {
-  addonInterface.getStream(r
+// Routes for Stremio addon
+app.get(
